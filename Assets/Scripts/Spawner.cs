@@ -4,10 +4,9 @@ using System;
 
 public class Spawner : MonoBehaviour
 {
-    [SerializeField] private GameObject _enemy;
-    [SerializeField] private bool _spawnerOn = true;
-    
-    public static event Action<int> NextCube;
+    [SerializeField] private GameObject _prefab;
+
+    public static event Action<int> NumberNextSpawnerChanged;
     private Spawner[] _spawners;
     private int _numberNextSpawner;
     private float _delay = 1;
@@ -19,17 +18,17 @@ public class Spawner : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(SpawnerEnemy(_delay));
+        StartCoroutine(SpawnPrefab(_delay));
     }
 
     private void OnEnable()
     {
-        Spawner.NextCube += SetNextSpawner;
+        Spawner.NumberNextSpawnerChanged += SetNextSpawner;
     }
 
     private void OnDisable()
     {
-        Spawner.NextCube -= SetNextSpawner;
+        Spawner.NumberNextSpawnerChanged -= SetNextSpawner;
     }
 
     private void SetNextSpawner(int numberNextSpawner)
@@ -37,29 +36,28 @@ public class Spawner : MonoBehaviour
         _numberNextSpawner = numberNextSpawner;
     }
 
-    private IEnumerator SpawnerEnemy(float delay)
+    private IEnumerator SpawnPrefab(float delay)
     {
-        while (_spawnerOn)
-        {
-            var wait = new WaitForSeconds(delay);
+        var wait = new WaitForSeconds(delay);
 
+        while (enabled)
+        {
             yield return wait;
 
-            if (this.gameObject.name == _spawners[_numberNextSpawner].name)
+            if (this == _spawners[_numberNextSpawner])
             {
                 Quaternion angle = Quaternion.identity;
                 angle.eulerAngles = new Vector3(0, UnityEngine.Random.value * 360, 0);
                 transform.rotation = angle;
 
-                GameObject enemy = Instantiate(_enemy);
+                GameObject enemy = Instantiate(_prefab);
                 enemy.transform.position = transform.position;
                 enemy.transform.rotation = transform.rotation;
 
-                _numberNextSpawner = UnityEngine.Random.Range(0, _spawners.Length);
-
                 yield return wait;
 
-                NextCube?.Invoke(_numberNextSpawner);
+                _numberNextSpawner = UnityEngine.Random.Range(0, _spawners.Length);
+                NumberNextSpawnerChanged?.Invoke(_numberNextSpawner);
             }
             else
             {
