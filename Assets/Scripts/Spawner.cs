@@ -49,6 +49,7 @@ public class Spawner : MonoBehaviour
                 Quaternion angle = Quaternion.identity;
                 angle.eulerAngles = new Vector3(0, UnityEngine.Random.value * 360, 0);
                 transform.rotation = angle;
+                //transform.LookAt();
 
                 GameObject enemy = Instantiate(_prefab);
                 enemy.transform.position = transform.position;
