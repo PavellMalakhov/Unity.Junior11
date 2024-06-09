@@ -1,39 +1,22 @@
 using System.Collections;
 using UnityEngine;
-using System;
 
 public class Spawner : MonoBehaviour
 {
-    [SerializeField] private GameObject _prefab;
-
-    public static event Action<int> NumberNextSpawnerChanged;
-    private Spawner[] _spawners;
-    private int _numberNextSpawner;
-    private float _delay = 1;
+    [SerializeField] private GameObject _prefabEnemy;
+    [SerializeField] private GameObject _prefabTarget;
+    [SerializeField] private Spawn[] _spawnes;
+    [SerializeField] private float _delay = 2;
+    [SerializeField] private int _numberNextSpawner;
 
     private void Awake()
     {
-        _spawners = FindObjectsOfType<Spawner>();
+        _spawnes = FindObjectsOfType<Spawn>();
     }
 
     private void Start()
     {
         StartCoroutine(SpawnPrefab(_delay));
-    }
-
-    private void OnEnable()
-    {
-        Spawner.NumberNextSpawnerChanged += SetNextSpawner;
-    }
-
-    private void OnDisable()
-    {
-        Spawner.NumberNextSpawnerChanged -= SetNextSpawner;
-    }
-
-    private void SetNextSpawner(int numberNextSpawner)
-    {
-        _numberNextSpawner = numberNextSpawner;
     }
 
     private IEnumerator SpawnPrefab(float delay)
@@ -44,26 +27,12 @@ public class Spawner : MonoBehaviour
         {
             yield return wait;
 
-            if (this == _spawners[_numberNextSpawner])
-            {
-                Quaternion angle = Quaternion.identity;
-                angle.eulerAngles = new Vector3(0, UnityEngine.Random.value * 360, 0);
-                transform.rotation = angle;
-                //transform.LookAt();
+            _numberNextSpawner = Random.Range(0, _spawnes.Length);
+            _spawnes[_numberNextSpawner].transform.LookAt(_prefabTarget.transform);
 
-                GameObject enemy = Instantiate(_prefab);
-                enemy.transform.position = transform.position;
-                enemy.transform.rotation = transform.rotation;
-
-                yield return wait;
-
-                _numberNextSpawner = UnityEngine.Random.Range(0, _spawners.Length);
-                NumberNextSpawnerChanged?.Invoke(_numberNextSpawner);
-            }
-            else
-            {
-                yield return wait;
-            }
+            GameObject enemy = Instantiate(_prefabEnemy);
+            enemy.transform.position = _spawnes[_numberNextSpawner].transform.position;
+            enemy.transform.rotation = _spawnes[_numberNextSpawner].transform.rotation;
         }
     }
 }
