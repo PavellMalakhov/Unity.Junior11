@@ -3,23 +3,23 @@ using UnityEngine;
 
 public class Spawner : MonoBehaviour
 {
-    [SerializeField] private GameObject _prefabEnemy;
-    [SerializeField] private GameObject _prefabTarget;
-    [SerializeField] private Spawn[] _spawnes;
+    [SerializeField] private Enemy _prefabEnemy;
+    [SerializeField] private GameObject Target;
+    [SerializeField] private SpawnPoint[] _spawnPoints;
     [SerializeField] private float _delay = 2;
     [SerializeField] private int _numberNextSpawner;
 
     private void Awake()
     {
-        _spawnes = FindObjectsOfType<Spawn>();
+        _spawnPoints = FindObjectsOfType<SpawnPoint>();
     }
 
     private void Start()
     {
-        StartCoroutine(SpawnPrefab(_delay));
+        StartCoroutine(Spawn(_delay));
     }
 
-    private IEnumerator SpawnPrefab(float delay)
+    private IEnumerator Spawn(float delay)
     {
         var wait = new WaitForSeconds(delay);
 
@@ -27,12 +27,11 @@ public class Spawner : MonoBehaviour
         {
             yield return wait;
 
-            _numberNextSpawner = Random.Range(0, _spawnes.Length);
-            _spawnes[_numberNextSpawner].transform.LookAt(_prefabTarget.transform);
+            _numberNextSpawner = Random.Range(0, _spawnPoints.Length);
+            _spawnPoints[_numberNextSpawner].transform.LookAt(Target.transform);
 
-            GameObject enemy = Instantiate(_prefabEnemy);
-            enemy.transform.position = _spawnes[_numberNextSpawner].transform.position;
-            enemy.transform.rotation = _spawnes[_numberNextSpawner].transform.rotation;
+            Enemy enemy = Instantiate(_prefabEnemy);
+            enemy.transform.SetPositionAndRotation(_spawnPoints[_numberNextSpawner].transform.position, _spawnPoints[_numberNextSpawner].transform.rotation);
         }
     }
 }

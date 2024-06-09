@@ -733,9 +733,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 638a7e7399f03fb43a279803c12daa31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _prefabEnemy: {fileID: 7208488202787397770, guid: cc388fe41239fdd468056e5acede2a4f, type: 3}
-  _prefabTarget: {fileID: 413280682}
-  _spawnes: []
+  _prefabEnemy: {fileID: 1181976239184434518, guid: cc388fe41239fdd468056e5acede2a4f, type: 3}
+  Target: {fileID: 413280682}
+  _spawnPoints: []
   _delay: 2
   _numberNextSpawner: 0
 --- !u!4 &1437743416
