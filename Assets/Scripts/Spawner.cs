@@ -4,7 +4,7 @@ using UnityEngine;
 public class Spawner : MonoBehaviour
 {
     [SerializeField] private Enemy _prefabEnemy;
-    [SerializeField] private GameObject Target;
+    [SerializeField] private GameObject _target;
     [SerializeField] private SpawnPoint[] _spawnPoints;
     [SerializeField] private float _delay = 2;
     [SerializeField] private int _numberNextSpawner;
@@ -28,7 +28,7 @@ public class Spawner : MonoBehaviour
             yield return wait;
 
             _numberNextSpawner = Random.Range(0, _spawnPoints.Length);
-            _spawnPoints[_numberNextSpawner].transform.LookAt(Target.transform);
+            _spawnPoints[_numberNextSpawner].transform.LookAt(_target.transform);
 
             Enemy enemy = Instantiate(_prefabEnemy);
             enemy.transform.SetPositionAndRotation(_spawnPoints[_numberNextSpawner].transform.position, _spawnPoints[_numberNextSpawner].transform.rotation);

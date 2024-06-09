@@ -734,7 +734,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _prefabEnemy: {fileID: 1181976239184434518, guid: cc388fe41239fdd468056e5acede2a4f, type: 3}
-  Target: {fileID: 413280682}
+  _target: {fileID: 413280682}
   _spawnPoints: []
   _delay: 2
   _numberNextSpawner: 0
