@@ -5,14 +5,14 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     [SerializeField] private float _speed = 1;
-    private Vector3 _target;
+    private GameObject _target;
 
     private void Update()
     {
-        transform.Translate(_target * _speed * Time.deltaTime, Space.World);
+        transform.position = Vector3.Lerp(transform.position, _target.transform.position, _speed * Time.deltaTime);
     }
 
-    public void SetTarget(Vector3 target)
+    public void SetTarget(GameObject target)
     {
         _target = target;
     }
