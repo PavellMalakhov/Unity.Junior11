@@ -28,10 +28,12 @@ public class Spawner : MonoBehaviour
             yield return wait;
 
             _numberNextSpawner = Random.Range(0, _spawnPoints.Length);
-            _spawnPoints[_numberNextSpawner].transform.LookAt(_target.transform);
+
+            Vector3 target = (_target.transform.position - _spawnPoints[_numberNextSpawner].transform.position).normalized;
 
             Enemy enemy = Instantiate(_prefabEnemy);
-            enemy.transform.SetPositionAndRotation(_spawnPoints[_numberNextSpawner].transform.position, _spawnPoints[_numberNextSpawner].transform.rotation);
+            enemy.transform.position = _spawnPoints[_numberNextSpawner].transform.position;
+            enemy.SetTarget(target);
         }
     }
 }
